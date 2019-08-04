@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PrettyListApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="done_button">done</string>
+    <string name="title_text">Title</string>
+    <string name="content_text">Content</string>
+</resources>

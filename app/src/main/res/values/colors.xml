@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+    <color name="colorPrimary">#6A4077</color>
+    <color name="colorPrimaryDark">#4B2153</color>
+    <color name="colorAccent">#B5D52666</color>
+    <color name="cardItemColor">#DBDBFF</color>
+
+    <color name="selectedItem">#7b3191</color>
+    <color name="selectedItemBorder">#684077</color>
+</resources>
