@@ -3,11 +3,12 @@ package com.example.prettylistapp.Files
 import com.example.prettylistapp.Note
 import java.io.File
 import java.io.FileInputStream
+import java.security.AccessController.getContext
 
 val notePropertyFileNames: List<String> = listOf("title.txt", "content.txt")
 //public var listFilesAddress = mutableListOf<String>()
 
-
+//val filesDir = getContext().getDir
 
 
 fun turnAddressToNote(file: File): Note {
@@ -33,7 +34,7 @@ fun getFilesNotes(filesDir: File): MutableList<Note> {
 
     //listFile() -> in app main folder
     // File.listFiles() --> in specific path
-    val f: File = File(filesDir, "notes")
+    val f = File(filesDir, "notes")
     val fileList = f.listFiles()
 
     val fileNoteArr: MutableList<Note> = mutableListOf()
@@ -55,7 +56,7 @@ fun getFilesNotes(filesDir: File): MutableList<Note> {
 
 fun getLastNoteAdded(filesDir: File): Note {
 
-    val f: File = File(filesDir, "notes")
+    val f = File(filesDir, "notes")
     val fileList = f.listFiles()
     val lastFile = fileList[fileList.size-1] //returning last file --> that is, most recently added
 

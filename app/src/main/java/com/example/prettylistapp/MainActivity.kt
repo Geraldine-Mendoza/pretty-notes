@@ -1,7 +1,8 @@
 package com.example.prettylistapp
 
+//import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+//import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Html
@@ -16,12 +17,12 @@ import android.view.MenuItem.SHOW_AS_ACTION_ALWAYS
 import android.view.MenuItem.SHOW_AS_ACTION_IF_ROOM
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+//import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.selection.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.prettylistapp.Adapter.Companion.tracker
-import com.example.prettylistapp.Files.getFilesNotes
-import com.example.prettylistapp.Files.getLastNoteAdded
+//import com.example.prettylistapp.Files.getFilesNotes
+//import com.example.prettylistapp.Files.getLastNoteAdded
 
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     //private lateinit var recyclerViewX: androidx.recyclerview.widget.RecyclerView
     private lateinit var adapter: RecyclerView.Adapter<*>
-    private val listFilesAddress: MutableList<Note> = mutableListOf()
+    private val listFilesAddress: MutableList<Note> = Note.getListFiles()
 
     //keep track of selection logic
     private var itemsAreSelected: Boolean = false
@@ -87,14 +88,14 @@ class MainActivity : AppCompatActivity() {
         //recyclerViewX = findViewById(R.id.recycler_view) //they are both the same, this is gonna cause problems
 
         //adapter
-        adapter = Adapter(recyclerView.context, listFilesAddress)
+        adapter = Adapter(recyclerView.context, Note.FilesAddressManager.getListFiles())
         recyclerView.adapter = adapter
 
         //layout manager
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        //get all stored notes
-        listFilesAddress.addAll(getFilesNotes(filesDir))
+        //get all stored notes and put in list
+        Note.FilesAddressManager.initializeList(filesDir)
 
         //set up tracker
         val tracker = setUpTracker()
@@ -164,7 +165,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateInsertedItem() {
 
-        listFilesAddress.add(0, getLastNoteAdded(filesDir)) //add most recent (last added) note to beginning of arr
+        Note.updateItemInserted(filesDir) //add most recent (last added) note to beginning of arr
         Log.d("list file", "this is list of Note objects: $listFilesAddress")
         adapter.notifyItemInserted(0)
 
@@ -174,8 +175,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateAllItems() {
 
         Log.d("resume", "we are now resuming")
-        listFilesAddress.clear()
-        listFilesAddress.addAll(getFilesNotes(filesDir))
+        Note.initializeList(filesDir)
         Log.d("list file", "this is list of Note objects: $listFilesAddress")
 
         adapter.notifyDataSetChanged()
@@ -234,24 +234,4 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun getOldItems() {
-
-        val currItemCount = recyclerView.childCount
-        val backUpList = mutableListOf<View>()
-
-        for (index in (0..currItemCount)) {
-
-            //we are getting view holder... this or view?
-            val itemViewHolder = recyclerView.getChildAt(index)
-        }
-
-    }
-
-    /*
-    return object : SelectionTracker.SelectionPredicate<K>() {
-
-        override fun canSelectMultiple(): Boolean {
-            return true
-        }
-    }*/
 }
