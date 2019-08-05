@@ -64,7 +64,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: RecyclerView.Adapter<*>
     private val listFilesAddress: MutableList<Note> = mutableListOf()
 
+    //keep track of selection logic
     private var itemsAreSelected: Boolean = false
+
+    //selection menu item itemId
+    private val cancelButtonId = Menu.FIRST+2
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                 ?.setShowAsAction(SHOW_AS_ACTION_ALWAYS)
             menu?.add(0, Menu.FIRST+1, Menu.NONE, R.string.select_all_button)?.setIcon(R.drawable.ic_select_all_white_24dp)
                 ?.setShowAsAction(SHOW_AS_ACTION_IF_ROOM)
-            menu?.add(0, Menu.FIRST+2, Menu.NONE, R.string.cancel_select_button)?.setIcon(R.drawable.ic_close_white_24dp)
+            menu?.add(0, cancelButtonId, Menu.NONE, R.string.cancel_select_button)?.setIcon(R.drawable.ic_close_white_24dp)
                 ?.setShowAsAction(SHOW_AS_ACTION_IF_ROOM)
 
         }
@@ -147,6 +152,7 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> true //open settings
             R.id.select_all_button -> { selectAllItems(); true }
+            cancelButtonId -> { deselectAllItems(); Log.d("menu selection", "here we are, clicking the cancel button"); return true}
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -222,6 +228,13 @@ class MainActivity : AppCompatActivity() {
     private fun selectAllItems() {
 
 
+
+    }
+
+    private fun deselectAllItems() {
+
+        Log.d("menu selection", "trying to clear selection after click")
+        tracker?.clearSelection()
     }
 
     private fun getOldItems() {
