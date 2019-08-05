@@ -122,26 +122,31 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    /*override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
 
         if (itemsAreSelected) {
             menu?.removeItem(R.id.action_settings)
-            menu?.add(0, Menu.FIRST, Menu.NONE, R.string.select_all_button)?.setIcon(R.drawable.ic_select_all_white_24dp)
+            menu?.add(0, Menu.FIRST, Menu.NONE, R.string.delete_button)?.setIcon(R.drawable.ic_trash_white_24dp)
+                ?.setShowAsAction(SHOW_AS_ACTION_ALWAYS)
+            menu?.add(0, Menu.FIRST+1, Menu.NONE, R.string.select_all_button)?.setIcon(R.drawable.ic_select_all_white_24dp)
                 ?.setShowAsAction(SHOW_AS_ACTION_IF_ROOM)
-
-        } else {
+            menu?.add(0, Menu.FIRST+2, Menu.NONE, R.string.cancel_select_button)?.setIcon(R.drawable.ic_close_white_24dp)
+                ?.setShowAsAction(SHOW_AS_ACTION_IF_ROOM)
 
         }
 
+        //automatically goes back to original menu
+
         return true
-    }*/
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> true //open settings
+            R.id.select_all_button -> { selectAllItems(); true }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -199,6 +204,9 @@ class MainActivity : AppCompatActivity() {
                             title = "PrettyListApp"
                             supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.colorPrimary)))
                         }
+
+                        //instantly changes menu to update (updates using prepare menu)
+                        invalidateOptionsMenu()
                     }
                     //pass to whatever function wants them?
 
@@ -209,6 +217,11 @@ class MainActivity : AppCompatActivity() {
         )
 
         return tracker
+    }
+
+    private fun selectAllItems() {
+
+
     }
 
     private fun getOldItems() {
