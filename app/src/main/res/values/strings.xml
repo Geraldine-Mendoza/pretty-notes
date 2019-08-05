@@ -7,4 +7,5 @@
     <string name="delete_button">delete</string>
     <string name="select_all_button">all</string>
     <string name="cancel_select_button">cancel</string>
+    <string name="tag_button">tag</string>
 </resources>
