@@ -17,10 +17,7 @@ import android.view.MenuItem.SHOW_AS_ACTION_IF_ROOM
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.selection.SelectionPredicates
-import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StableIdKeyProvider
-import androidx.recyclerview.selection.StorageStrategy
+import androidx.recyclerview.selection.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.prettylistapp.Adapter.Companion.tracker
 import com.example.prettylistapp.Files.getFilesNotes
@@ -227,7 +224,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun selectAllItems() {
 
-
+        //tracker.setItemsSelected()
 
     }
 

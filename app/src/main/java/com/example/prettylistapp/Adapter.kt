@@ -26,6 +26,7 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
     companion object {
 
         var tracker: SelectionTracker<Long>? = null
+        var positionsArray = mutableListOf<Long>()
 
         //const val bc each viewHolder class instance is for a specific note
         const val note_id = "note_id"
@@ -131,7 +132,7 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> = object : ItemDetailsLookup.ItemDetails<Long>() {
                 override fun getPosition(): Int = adapterPosition
                 override fun getSelectionKey(): Long? = itemId
-            }
+        }
 
     }
 
