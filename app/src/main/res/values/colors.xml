@@ -8,7 +8,7 @@
     <color name="colorAccent">#D2D52666</color>
     <color name="cardItemColor">#DBDBFF</color>
 
-    <color name="selectedItem">#7b3191</color>
+    <color name="selectedItem">#C099CF</color>
     <color name="selectedItemBorder">#684077</color>
 
     <color name="barItemsSelected">#2A0346</color>

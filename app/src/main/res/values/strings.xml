@@ -4,4 +4,7 @@
     <string name="done_button">done</string>
     <string name="title_text">Title</string>
     <string name="content_text">Content</string>
+    <string name="delete_button">delete</string>
+    <string name="select_all_button">all</string>
+    <string name="cancel_select_button">cancel</string>
 </resources>

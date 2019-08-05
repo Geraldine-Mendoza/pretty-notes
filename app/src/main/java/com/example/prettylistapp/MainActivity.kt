@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MenuItem.SHOW_AS_ACTION_ALWAYS
+import android.view.MenuItem.SHOW_AS_ACTION_IF_ROOM
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -26,6 +28,7 @@ import com.example.prettylistapp.Files.getLastNoteAdded
 
 
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 //now need to update recyclerView after return from newNote/noteInspection
 
@@ -60,6 +63,8 @@ class MainActivity : AppCompatActivity() {
     //private lateinit var recyclerViewX: androidx.recyclerview.widget.RecyclerView
     private lateinit var adapter: RecyclerView.Adapter<*>
     private val listFilesAddress: MutableList<Note> = mutableListOf()
+
+    private var itemsAreSelected: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,6 +122,20 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    /*override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+
+        if (itemsAreSelected) {
+            menu?.removeItem(R.id.action_settings)
+            menu?.add(0, Menu.FIRST, Menu.NONE, R.string.select_all_button)?.setIcon(R.drawable.ic_select_all_white_24dp)
+                ?.setShowAsAction(SHOW_AS_ACTION_IF_ROOM)
+
+        } else {
+
+        }
+
+        return true
+    }*/
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -172,9 +191,11 @@ class MainActivity : AppCompatActivity() {
 
                     items?.let {
                         if (it > 0) {
+                            itemsAreSelected = true
                             title = "$it items selected"
                             supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.barItemsSelected)))
                         } else {
+                            itemsAreSelected = false
                             title = "PrettyListApp"
                             supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.colorPrimary)))
                         }
