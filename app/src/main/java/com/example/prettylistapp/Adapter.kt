@@ -76,37 +76,14 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
         notifyDataSetChanged()
     }
 
-    /*
-    //https://antonioleiva.com/recyclerview-diffutil-kotlin/
-    fun notifyChanges(oldList: List<Content>, newList: List<Content>) {
-
-        val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return oldList[oldItemPosition].id == newList[newItemPosition].id
-            }
-
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return oldList[oldItemPosition] == newList[newItemPosition]
-            }
-
-            override fun getOldListSize() = oldList.size
-
-            override fun getNewListSize() = newList.size
-        })
-
-        diff.dispatchUpdatesTo(this)
-    }*/
-
     //added inner so that i have access to variables in adapter
-    inner class ViewHolder(private val inflatedView: View) : RecyclerView.ViewHolder(inflatedView), View.OnClickListener, View.OnLongClickListener {
+    inner class ViewHolder(private val inflatedView: View) : RecyclerView.ViewHolder(inflatedView), View.OnClickListener {
 
         private lateinit var noteTitleText: TextView
         private lateinit var noteContentText: TextView
         val context = inflatedView.context
 
         init {
-            inflatedView.setOnLongClickListener(this)
             inflatedView.setOnClickListener(this)
         }
 
@@ -149,14 +126,6 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
             //add extra info to intent
             fullNoteIntent.putExtra("note_id", 0) //add correct note id
             context.startActivity(fullNoteIntent)
-        }
-
-        override fun onLongClick(v: View?): Boolean {
-
-            Log.d("adapter", "you just long clicked")
-            inflatedView.setBackgroundColor(ContextCompat.getColor(context, R.color.selectedItem))
-            notifyDataSetChanged()
-            return false
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> = object : ItemDetailsLookup.ItemDetails<Long>() {

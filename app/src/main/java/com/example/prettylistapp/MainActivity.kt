@@ -1,7 +1,10 @@
 package com.example.prettylistapp
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Html
 //import android.support.v7.app.AppCompatActivity
 //import android.support.v7.widget.LinearLayoutManager
 //import android.support.v7.widget.RecyclerView
@@ -17,6 +20,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.prettylistapp.Adapter.Companion.tracker
 import com.example.prettylistapp.Files.getFilesNotes
 import com.example.prettylistapp.Files.getLastNoteAdded
 
@@ -60,7 +64,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar as Toolbar?)
+        setSupportActionBar(toolbar)
+
 
         fab.setOnClickListener { view ->
             //this is a test
@@ -83,16 +88,20 @@ class MainActivity : AppCompatActivity() {
         //get all stored notes
         listFilesAddress.addAll(getFilesNotes(filesDir))
 
-        //setting up tracker
-        val tracker = SelectionTracker.Builder<Long>(
-            "mainItemSelection",
-            recyclerView,
-            StableIdKeyProvider(recyclerView),
-            MyItemDetailsLookup(recyclerView),
-            StorageStrategy.createLongStorage()
-        ).withSelectionPredicate(SelectionPredicates.createSelectAnything()).build()
-
+        //set up tracker
+        val tracker = setUpTracker()
         Adapter.tracker = tracker
+
+        if(savedInstanceState != null)
+            tracker?.onRestoreInstanceState(savedInstanceState)
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+
+        if(outState != null)
+            tracker?.onSaveInstanceState(outState)
     }
 
     //should not update items here... instead, when returning from add (result)
@@ -144,6 +153,43 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
+    private fun setUpTracker(): SelectionTracker<Long> {
+        //setting up tracker
+        val tracker = SelectionTracker.Builder<Long>(
+            "mainItemSelection",
+            recyclerView,
+            StableIdKeyProvider(recyclerView),
+            MyItemDetailsLookup(recyclerView),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(SelectionPredicates.createSelectAnything()).build()
+
+        //observer checks how many are selected
+        tracker?.addObserver(
+            object : SelectionTracker.SelectionObserver<Long>() {
+                override fun onSelectionChanged() {
+                    super.onSelectionChanged()
+                    val items = tracker?.selection?.size()
+
+                    items?.let {
+                        if (it > 0) {
+                            title = "$it items selected"
+                            supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.barItemsSelected)))
+                        } else {
+                            title = "PrettyListApp"
+                            supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.colorPrimary)))
+                        }
+                    }
+                    //pass to whatever function wants them?
+
+                    //on first selection, notify that we need button to delete in action bar
+
+                }
+            }
+        )
+
+        return tracker
+    }
+
     private fun getOldItems() {
 
         val currItemCount = recyclerView.childCount
@@ -156,4 +202,12 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    /*
+    return object : SelectionTracker.SelectionPredicate<K>() {
+
+        override fun canSelectMultiple(): Boolean {
+            return true
+        }
+    }*/
 }
