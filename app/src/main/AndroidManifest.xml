@@ -11,7 +11,8 @@
             android:theme="@style/AppTheme">
         <activity android:name=".NewNote">
         </activity>
-        <activity android:name=".NoteInspection">
+        <activity android:name=".NoteInspection"
+            android:theme="@style/NoActionBarTheme">
         </activity>
         <activity
                 android:name=".MainActivity"

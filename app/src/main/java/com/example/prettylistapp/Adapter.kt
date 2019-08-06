@@ -102,11 +102,11 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
             noteContentText = inflatedView.note_content
 
             //getting object with full information from array
-            val title = currNote.title
-            val content = currNote.content
+            val title = currNote.getTitle()
+            val content = currNote.getContent()
 
             //setting object properties to view
-            if (title != "\n") { //if 'empty'
+            if (title.isNotEmpty()) { //if 'empty'
                 Log.d("bind note", "title of $title is not empty")
                 noteTitleText.visibility = View.VISIBLE
             } else {

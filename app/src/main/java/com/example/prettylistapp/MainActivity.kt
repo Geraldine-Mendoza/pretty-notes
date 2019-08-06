@@ -30,12 +30,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 //now need to update recyclerView after return from newNote/noteInspection
 
-//ADD ERRROR ALERTS ALWAYS WHEN CHECKING IF SOMETHING IS OK
 
-//first click expands
-// then, button at top to edit, which takes to 'noteInspection'
-// second click to close
-// USE OBJECT (SINGLETON) TO STORE ~CACHE OF DATA... PLACE ADD FUNCTION WITHIN THERE, OR ADD A COMPANION OBJECT
+/**      **   TO DO !!!  **
+
+    ADD ERROR ALERTS ALWAYS WHEN CHECKING IF SOMETHING IS OK
+    organize saveFile/getFile functions and how we get filesDir
+    re-add newNote supportActionBar
+    add space between title and text now that extra bottom space was taken out
+
+*/
+
+// USE OBJECT (SINGLETON) TO STORE ~CACHE OF DATA... PLACE ADD FUNCTION WITHIN THERE, OR ADD A COMPANION OBJECT done!
 //
 // things that annoy me about other apps
 // - scrolling to find/see title should be as each as possible

@@ -61,7 +61,7 @@ class NewNote : AppCompatActivity() {
         val context = titleText.context
 
         //what will be saved
-        val noteProperties = listOf(newNote.title, newNote.content)
+        val noteProperties = listOf(newNote.getTitle(), newNote.getContent())
 
         //save to internal storage in separate file
         val directory = context.getFilesDir() //internal storage

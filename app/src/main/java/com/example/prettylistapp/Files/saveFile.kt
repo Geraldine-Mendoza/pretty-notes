@@ -46,7 +46,7 @@ fun tryToSaveFile(fileName: String, appMainDir: File, noteProperties: List<Strin
             //try to write
             try {
                 // response is the data written to file
-                PrintWriter(dest).use { out -> out.println(value) }
+                PrintWriter(dest).use { out -> out.print(value) }
 
                 /*
                 //SO, DESPITE NOT BEING ABLE TO SEE FILES IN ANDROID FILE VIEWER, I AM ABLE TO READ FROM THEM... so they must be there right?

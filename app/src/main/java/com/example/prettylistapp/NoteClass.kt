@@ -8,17 +8,25 @@ import java.io.File
 class Note(setId: String?, setTitle: String, setContent: String) {
 
     val id:String? = setId
-    val title = setTitle
-    val content = setContent
+    private var title = setTitle
+    private var content = setContent
 
     init {
 
         Log.d("Note created", "Note class instance has id $id, title of $title, content of $content")
     }
 
+    fun getTitle(): String { return title }
+    fun getContent(): String { return content }
+
+    fun updateTitle(newTitle: String) { title = newTitle }
+
+    fun updateContent(newCont: String) { content = newCont }
+
     companion object FilesAddressManager {
 
         private val listFilesAddress: MutableList<Note> = mutableListOf()
+        private val listAddresses: MutableList<String> = mutableListOf()
 
         fun getListFiles(): MutableList<Note> {
             return listFilesAddress

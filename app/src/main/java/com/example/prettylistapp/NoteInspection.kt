@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.example.prettylistapp.Files.updateNoteInAdress
 import kotlinx.android.synthetic.main.note_inspection.*
 
 class NoteInspection : AppCompatActivity() {
@@ -14,6 +15,8 @@ class NoteInspection : AppCompatActivity() {
     private lateinit var noteTitle: EditText
     private lateinit var noteContent: EditText
     private var listFilesAddress = Note.getListFiles()
+    private var noteItemSelected: Note? = null
+    private var notePosition: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,18 +54,22 @@ class NoteInspection : AppCompatActivity() {
 
     private fun setUpInspection() {
 
-        val notePosition = intent.getIntExtra("noteArrayPosition", 0)
+        notePosition = intent.getIntExtra("noteArrayPosition", 0)
 
+        //NOT WELL ORGANIZED
         // if position not within size of array, there was an error!
-        if ( notePosition !in (0..listFilesAddress.size) ) {
+        if ( notePosition!! !in (0..listFilesAddress.size) || notePosition == null) {
             Log.d("note inspection", "the position is outside of the possible range! position is $notePosition")
             errorToastAlert("requesting note information failed.", noteTitle.context)
             onBackPressed()
         }
-        val noteItemSelected = listFilesAddress[notePosition]
 
-        noteTitle.setText(noteItemSelected.title)
-        noteContent.setText(noteItemSelected.content)
+        notePosition?.let {
+            noteItemSelected = listFilesAddress[it]
+
+            noteTitle.setText(noteItemSelected?.getTitle())
+            noteContent.setText(noteItemSelected?.getContent())
+        }
     }
 
     private fun setUpUIElements() {
@@ -71,6 +78,18 @@ class NoteInspection : AppCompatActivity() {
     }
 
     private fun saveUpdatedNote() {
+
+        Log.d("file saving", "saving note")
+
+        noteItemSelected?.let {
+
+            it.updateTitle(noteTitle.text.toString())
+            it.updateContent(noteContent.text.toString())
+        }
+
+        notePosition?.let {
+            updateNoteInAdress(it, filesDir)
+        }
 
     }
 
