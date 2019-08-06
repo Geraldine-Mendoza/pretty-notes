@@ -5,11 +5,11 @@ import com.example.prettylistapp.Files.getFilesNotes
 import com.example.prettylistapp.Files.getLastNoteAdded
 import java.io.File
 
-class Note(setId: String?, t: String, cont: String) {
+class Note(setId: String?, setTitle: String, setContent: String) {
 
     val id:String? = setId
-    val title = t
-    val content = cont
+    val title = setTitle
+    val content = setContent
 
     init {
 

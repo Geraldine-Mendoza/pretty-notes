@@ -3,16 +3,52 @@
               xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
               android:layout_height="match_parent" android:orientation="vertical">
 
-    <TextView
-            android:text="Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/note_title"
-            style="@style/noteTitle"
-    />
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/note_content"
-            tools:text="Content of note is a description of the qualities of something maybe related to the note."
-            style="@style/noteContent"
-    />
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+        >
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/inspectionToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:theme="@style/ToolBarStyle"
+            />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/note_title"
+        style="@style/noteTitleFull"
+        android:background="@android:color/transparent"
+        android:maxLines="1"
+        android:paddingTop="12dp"
+        tools:text="Title" android:hint="@string/title_text"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/colorPrimaryDark"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:inputType="textMultiLine"
+        android:maxLines="26"
+        android:ems="10"
+        android:id="@+id/note_content" android:background="@android:color/transparent"
+        tools:text="The content of this note is actually quite interesting; as an intellectual, I have great interest in English and literature and all stupid things."
+        android:isScrollContainer="true"
+        style="@style/noteContentFull"
+        android:hint="@string/content_text" android:gravity="clip_vertical"/>
 </LinearLayout>

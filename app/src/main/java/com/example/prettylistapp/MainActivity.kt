@@ -30,6 +30,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 //now need to update recyclerView after return from newNote/noteInspection
 
+//ADD ERRROR ALERTS ALWAYS WHEN CHECKING IF SOMETHING IS OK
+
 //first click expands
 // then, button at top to edit, which takes to 'noteInspection'
 // second click to close
@@ -88,14 +90,14 @@ class MainActivity : AppCompatActivity() {
         //recyclerViewX = findViewById(R.id.recycler_view) //they are both the same, this is gonna cause problems
 
         //adapter
-        adapter = Adapter(recyclerView.context, Note.FilesAddressManager.getListFiles())
+        adapter = Adapter(recyclerView.context, Note.getListFiles())
         recyclerView.adapter = adapter
 
         //layout manager
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         //get all stored notes and put in list
-        Note.FilesAddressManager.initializeList(filesDir)
+        Note.initializeList(filesDir)
 
         //set up tracker
         val tracker = setUpTracker()

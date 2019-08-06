@@ -3,7 +3,6 @@ package com.example.prettylistapp.Files
 import com.example.prettylistapp.Note
 import java.io.File
 import java.io.FileInputStream
-import java.security.AccessController.getContext
 
 val notePropertyFileNames: List<String> = listOf("title.txt", "content.txt")
 //public var listFilesAddress = mutableListOf<String>()
@@ -25,7 +24,7 @@ fun turnAddressToNote(file: File): Note {
 
     }
 
-    return Note(setId = id, t = propertyValues[0], cont = propertyValues[1])
+    return Note(setId = id, setTitle = propertyValues[0], setContent = propertyValues[1])
 }
 
 
@@ -80,7 +79,7 @@ fun getNoteProperties(fileIdAddress: String): Note {
         propertyValues.add(inputAsString)
     }
 
-    val newNote = Note(null, t = propertyValues[0], cont = propertyValues[1])
+    val newNote = Note(null, setTitle = propertyValues[0], setContent = propertyValues[1])
 
     return newNote
 

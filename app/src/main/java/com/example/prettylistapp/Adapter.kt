@@ -19,6 +19,10 @@ import com.example.prettylistapp.Files.getNoteProperties
 //import com.example.prettylistapp.Files.listFilesAddress
 import kotlinx.android.synthetic.main.list_item.view.*
 
+
+//position passed to adapter is the same as position of Note in array
+/** does this change after item is deleted? **/
+
 class Adapter(context: Context, private val listFilesAddress: MutableList<Note>): RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     //var listFilesAddress = com.example.prettylistapp.Files.listFilesAddress
@@ -26,10 +30,9 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
     companion object {
 
         var tracker: SelectionTracker<Long>? = null
-        var positionsArray = mutableListOf<Long>()
 
         //const val bc each viewHolder class instance is for a specific note
-        const val note_id = "note_id"
+        const val noteArrayPosition:Int = 0
     }
 
     //private val backUpItemList = mutableListOf<View>() //is keeping track of VIEWS ok? will the views here be updated
@@ -60,8 +63,6 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
         }
     }
 
-
-
     override fun getItemId(position: Int): Long {
 
         return position.toLong()
@@ -84,12 +85,16 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
         private lateinit var noteContentText: TextView
         val context = inflatedView.context
 
+        //we store position so that we can pass it to inspection onClick
+        private var position: Int? = null
+
         init {
             inflatedView.setOnClickListener(this)
         }
 
         fun bindNote(position: Int, activatedBool: Boolean = false) {
 
+            this.position = position
             val currNote = listFilesAddress[position]
 
             //setting up textViews
@@ -125,13 +130,13 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
             val fullNoteIntent = Intent(context, NoteInspection::class.java) //add class intent will move to
 
             //add extra info to intent
-            fullNoteIntent.putExtra("note_id", 0) //add correct note id
+            fullNoteIntent.putExtra("noteArrayPosition", position) //add correct note position in arr
             context.startActivity(fullNoteIntent)
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> = object : ItemDetailsLookup.ItemDetails<Long>() {
                 override fun getPosition(): Int = adapterPosition
-                override fun getSelectionKey(): Long? = itemId
+                override fun getSelectionKey(): Long? = itemId //uses id, which is the position as a Long
         }
 
     }
