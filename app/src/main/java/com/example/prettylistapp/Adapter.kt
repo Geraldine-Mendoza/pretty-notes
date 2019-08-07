@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
-import com.example.prettylistapp.Files.getNoteProperties
 //import com.example.prettylistapp.Files.listFilesAddress
 import kotlinx.android.synthetic.main.list_item.view.*
 
