@@ -170,7 +170,12 @@ class MainActivity : AppCompatActivity() {
 
         if (resultCode == Activity.RESULT_CANCELED) {
             Log.d("result", "cancelled result")
+
+            //if this is not added, recyclerView will crash on return (without list change) when an editText is focused in the newNote activity
+            // ... i dont know why
+            adapter.notifyDataSetChanged()
         } else if (resultCode == ERROR_SAVING) {
+            adapter.notifyDataSetChanged()
             errorToastAlert("error saving note.", recyclerView.context)
         } else {
 
