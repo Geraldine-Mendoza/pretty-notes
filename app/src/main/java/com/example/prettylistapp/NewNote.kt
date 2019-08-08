@@ -1,6 +1,8 @@
 package com.example.prettylistapp
 
 //import android.support.v7.app.AppCompatActivity
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -56,6 +58,8 @@ class NewNote : AppCompatActivity() {
 
     private fun doneButtonClicked() {
 
+        //note is saved regardless of empty title/content
+
         //creating new Note instance
         val newNote = Note(createFileName(), titleText.text.toString(), contentText.text.toString())
         val context = titleText.context
@@ -69,9 +73,21 @@ class NewNote : AppCompatActivity() {
 
         //if note id is not null, save and go back
         newNote.id?.let {
-            tryToSaveFile(it, directory, noteProperties)
-            //is this ok?.. we are just going back... or should new intent be made?
-            onBackPressed()
+
+            //save new dir -> if success in saving, return RESULT_OK
+            if (tryToSaveFile(it, directory, noteProperties)) {
+
+                //update array list
+                Note.updateItemInserted(filesDir)
+
+                //returning with success message... (no need to return data, unlike delete)
+                val result = Intent()
+                setResult(Activity.RESULT_OK)
+            } else {
+                setResult(Activity.RESULT_CANCELED)
+            }
+
+            finish()
             return
         }
 

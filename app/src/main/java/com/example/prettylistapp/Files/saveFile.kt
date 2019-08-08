@@ -24,7 +24,7 @@ fun updateNoteInAdress(position: Int, filesDir: File) {
 }
 
 //need to redo all :( no
-fun tryToSaveFile(fileName: String, appMainDir: File, noteProperties: List<String>) {
+fun tryToSaveFile(fileName: String, appMainDir: File, noteProperties: List<String>): Boolean {
 
     //make 'notes' dir
     var success = true
@@ -38,7 +38,7 @@ fun tryToSaveFile(fileName: String, appMainDir: File, noteProperties: List<Strin
 
     if (!success) {
         Log.d("file saving", "could not create directory /notes")
-        return
+        return false
     }
 
     //creating inner folder within files, name of which is id....
@@ -53,10 +53,11 @@ fun tryToSaveFile(fileName: String, appMainDir: File, noteProperties: List<Strin
         writeToAllFiles(noteDir, noteProperties)
 
         Log.d("saving file", "we should have directory ${noteDir.path}")
+        return true
 
     } else {
         Log.d("file saving", "could not create directory /notes/uniqueFileName ")
-        return
+        return false
     }
 }
 

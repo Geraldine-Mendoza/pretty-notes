@@ -37,6 +37,7 @@ class Note(setId: String?, setTitle: String, setContent: String) {
             listFilesAddress.addAll(getFilesNotes(filesDir))
         }
 
+        //this function could cause accidental copying if we don't check successful saving
         fun updateItemInserted(filesDir: File) {
             addToBeginningList(getLastNoteAdded(filesDir))
         }

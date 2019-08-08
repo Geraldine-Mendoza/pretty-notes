@@ -1,6 +1,7 @@
 package com.example.prettylistapp
 
 //import android.content.Context
+import android.app.Activity
 import android.content.Intent
 //import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -77,6 +78,10 @@ class MainActivity : AppCompatActivity() {
     private val deleteButtonId = tagButtonId+1
     private val cancelButtonId = tagButtonId+2
 
+    //types of result types
+    private val CREATE_NEW_NOTE = 1
+    private val MODIFY_NOTE = 2
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -113,6 +118,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //so that tracker does not 'restart' on flip and various other stuff
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
 
@@ -124,7 +130,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        updateAllItems()
+        //no longer needed since we are using onActivityResult
+        //updateAllItems()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -133,6 +140,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    //update items on selection of at least one item
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
 
         if (itemsAreSelected) {
@@ -151,6 +159,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    //options item (so far) only needed for onSelected menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -163,11 +172,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //handle actions onReturn (update recyclerView depending on activity action)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if (resultCode == Activity.RESULT_CANCELED) {
+            //when there is an error
+            errorToastAlert("receiving data from previous activity.", recyclerView.context)
+            return
+        }
+
+        //do any errors in copying appear due to getting note?
+        when (requestCode) {
+            CREATE_NEW_NOTE -> {
+                updateInsertedItem()
+            }
+        }
+    }
+
+    //fabButton to make new Note
     private fun onAddClick(v: View) {
 
         //creating small intent test
         val testIntent = Intent(v.context, NewNote::class.java)
-        startActivity(testIntent)
+        startActivityForResult(testIntent, CREATE_NEW_NOTE)
     }
 
     //these update fuction both update the recycler view AND the listFIlesAddress which both this and Adapter depend on!
@@ -183,14 +210,19 @@ class MainActivity : AppCompatActivity() {
     //called only after new note activity
     private fun updateInsertedItem() {
 
-        Note.updateItemInserted(filesDir) //add most recent (last added) note to beginning of arr
-        Log.d("list file", "this is list of Note objects: $listFilesAddress")
-        adapter.notifyItemInserted(0)
+        //list is updated in newNote.kt, here we just need to update adapter (recyclerView)
+        Log.d("list file", "this is list of Note objects: $listFilesAddress at updateInserted Item has size ${listFilesAddress.size}")
+        //adapter.notifyItemInserted(0) --> seems like not really needed
 
+        //APP WILL CRASH UNLESS YOU UPDATE ITEM RANGE ALWAYSSSSS ;((
+        adapter.notifyItemRangeChanged(0, listFilesAddress.size)
+
+        //scroll to position of item added
+        recyclerView.scrollToPosition(0)
 
     }
 
-    //called when multiple items are deleted at the same time
+    //called when multiple items are deleted at the same time... must also update range... :(
     private fun updateAllItems() {
 
         Log.d("resume", "we are now resuming")
@@ -203,6 +235,7 @@ class MainActivity : AppCompatActivity() {
         //adapter.notifyItemRangeChanged(getPosition, mDataSet.size())
     }
 
+    //set up tracker, actions when at least one item is selected
     private fun setUpTracker(): SelectionTracker<Long> {
         //setting up tracker
         val tracker = SelectionTracker.Builder<Long>(
@@ -249,11 +282,6 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("menu selection", "trying to clear selection after click")
         tracker?.clearSelection()
-    }
-
-    private fun deleteItem() {
-
-
     }
 
 }

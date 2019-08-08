@@ -17,6 +17,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 //import com.example.prettylistapp.Files.listFilesAddress
 import kotlinx.android.synthetic.main.list_item.view.*
+import java.security.AccessController.getContext
 
 
 //position passed to adapter is the same as position of Note in array
@@ -73,10 +74,6 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
         return listFilesAddress.size
     }
 
-    fun updateRecyclerView() {
-        notifyDataSetChanged()
-    }
-
     //added inner so that i have access to variables in adapter
     inner class ViewHolder(private val inflatedView: View) : RecyclerView.ViewHolder(inflatedView), View.OnClickListener {
 
@@ -85,7 +82,7 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
         val context = inflatedView.context
 
         //we store position so that we can pass it to inspection onClick
-        private var position: Int? = null
+        //private var position: Int
 
         init {
             inflatedView.setOnClickListener(this)
@@ -93,7 +90,6 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
 
         fun bindNote(position: Int, activatedBool: Boolean = false) {
 
-            this.position = position
             val currNote = listFilesAddress[position]
 
             Log.d("position", "bind note with position $position")
@@ -123,7 +119,7 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
 
         override fun onClick(v: View?) {
             //on click, create intent to move to note
-            Log.d("position", "clicked note with position $position")
+            Log.d("position", "clicked note with position $adapterPosition")
 
             //get context using the (previously) inflatedView
             val context = context
@@ -132,7 +128,7 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
             val fullNoteIntent = Intent(context, NoteInspection::class.java) //add class intent will move to
 
             //add extra info to intent
-            fullNoteIntent.putExtra("noteArrayPosition", position) //add correct note position in arr
+            fullNoteIntent.putExtra("noteArrayPosition", adapterPosition) //add correct note position in arr
             context.startActivity(fullNoteIntent)
         }
 
