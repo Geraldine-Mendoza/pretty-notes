@@ -16,6 +16,7 @@ class NewNote : AppCompatActivity() {
 
     private lateinit var titleText: EditText
     private lateinit var contentText: EditText
+    private val ERROR_SAVING = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +47,10 @@ class NewNote : AppCompatActivity() {
 
             R.id.done_button -> doneButtonClicked()
             //is this safe, for back button?
+            android.R.id.home -> { setResult(Activity.RESULT_CANCELED); onBackPressed() }
             else -> {
+                setResult(Activity.RESULT_CANCELED)
                 onBackPressed()
-                Log.d("new note", "going back through 'else' in back button")
             }
 
         }
@@ -81,10 +83,10 @@ class NewNote : AppCompatActivity() {
                 Note.updateItemInserted(filesDir)
 
                 //returning with success message... (no need to return data, unlike delete)
-                val result = Intent()
+                //val result = Intent()
                 setResult(Activity.RESULT_OK)
             } else {
-                setResult(Activity.RESULT_CANCELED)
+                setResult(ERROR_SAVING)
             }
 
             finish()

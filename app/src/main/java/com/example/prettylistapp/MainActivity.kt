@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity() {
     //types of result types
     private val CREATE_NEW_NOTE = 1
     private val MODIFY_NOTE = 2
+    private val ERROR_SAVING = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,14 +127,6 @@ class MainActivity : AppCompatActivity() {
             tracker?.onSaveInstanceState(outState)
     }
 
-    //should not update items here... instead, when returning from add (result)
-    override fun onResume() {
-        super.onResume()
-
-        //no longer needed since we are using onActivityResult
-        //updateAllItems()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -176,15 +169,17 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         if (resultCode == Activity.RESULT_CANCELED) {
-            //when there is an error
-            errorToastAlert("receiving data from previous activity.", recyclerView.context)
-            return
-        }
+            Log.d("result", "cancelled result")
+        } else if (resultCode == ERROR_SAVING) {
+            errorToastAlert("error saving note.", recyclerView.context)
+        } else {
 
-        //do any errors in copying appear due to getting note?
-        when (requestCode) {
-            CREATE_NEW_NOTE -> {
-                updateInsertedItem()
+            //do any errors in copying appear due to getting note?
+            when (requestCode) {
+                CREATE_NEW_NOTE -> {
+
+                    if (resultCode == Activity.RESULT_OK) { updateInsertedItem() }
+                }
             }
         }
     }
