@@ -170,6 +170,17 @@ class MainActivity : AppCompatActivity() {
         startActivity(testIntent)
     }
 
+    //these update fuction both update the recycler view AND the listFIlesAddress which both this and Adapter depend on!
+    /** EACH FUNCTION MUST BE CALLED APPROPIATELY AND UPDATEALLITEMS SHOULD BE USED CAREFULLY*/
+    //what could also be done is that listFilesAddress is updated from within the Files functions, and then we simply get the list again from Note class...
+
+    //called only after returning (with trash result) from inspection activity
+    private fun updateDeletedItem() { }
+
+    //called only after returning (with correct result) from inspection activity
+    private fun updateModifiedItem() {  }
+
+    //called only after new note activity
     private fun updateInsertedItem() {
 
         Note.updateItemInserted(filesDir) //add most recent (last added) note to beginning of arr
@@ -179,6 +190,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //called when multiple items are deleted at the same time
     private fun updateAllItems() {
 
         Log.d("resume", "we are now resuming")
@@ -186,6 +198,9 @@ class MainActivity : AppCompatActivity() {
         Log.d("list file", "this is list of Note objects: $listFilesAddress")
 
         adapter.notifyDataSetChanged()
+
+        //have to call this after deletion!
+        //adapter.notifyItemRangeChanged(getPosition, mDataSet.size())
     }
 
     private fun setUpTracker(): SelectionTracker<Long> {

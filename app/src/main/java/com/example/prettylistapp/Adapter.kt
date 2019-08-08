@@ -96,6 +96,8 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
             this.position = position
             val currNote = listFilesAddress[position]
 
+            Log.d("position", "bind note with position $position")
+
             //setting up textViews
             noteTitleText = inflatedView.note_title
             noteContentText = inflatedView.note_content
@@ -106,7 +108,7 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
 
             //setting object properties to view
             if (title.isNotEmpty()) { //if 'empty'
-                Log.d("bind note", "title of $title is not empty")
+                Log.d("bind note", "title of $title")
                 noteTitleText.visibility = View.VISIBLE
             } else {
                 Log.d("bind note", "gonna make you gone")
@@ -121,6 +123,7 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
 
         override fun onClick(v: View?) {
             //on click, create intent to move to note
+            Log.d("position", "clicked note with position $position")
 
             //get context using the (previously) inflatedView
             val context = context

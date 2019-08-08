@@ -13,7 +13,9 @@
         <activity android:name=".NewNote">
         </activity>
         <activity android:name=".NoteInspection"
-            android:theme="@style/NoActionBarTheme">
+            android:theme="@style/NoActionBarTheme"
+            android:parentActivityName=".MainActivity"
+            >
         </activity>
         <activity
                 android:name=".MainActivity"

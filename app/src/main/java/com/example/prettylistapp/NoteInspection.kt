@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.example.prettylistapp.Files.deleteSingleFile
 import com.example.prettylistapp.Files.updateNoteInAdress
 import kotlinx.android.synthetic.main.note_inspection.*
 
@@ -43,13 +44,39 @@ class NoteInspection : AppCompatActivity() {
         return true
     }
 
-    //back button return up
-    override fun onSupportNavigateUp(): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        //is this a safe null practice?
+        when (item?.itemId) {
+
+            //need to timplement result for Main Activity
+            /*R.id.delete_button -> {
+
+                notePosition?.let {
+                    deleteSingleFile(it, filesDir)
+                } ?: run {
+
+                    Log.d("inspection", "position is null!")
+                    errorToastAlert("note position cannot be found.", noteTitle.context)
+                }
+
+                onBackPressed()
+            }*/
+
+            android.R.id.home -> { onBackPressed(); true}
+
+            else -> return true
+
+        }
+
+        return true
+    }
+
+    //save note whenever back is pressed
+    override fun onBackPressed() {
+        super.onBackPressed()
 
         saveUpdatedNote()
-
-        onBackPressed()
-        return true
     }
 
     private fun setUpInspection() {
