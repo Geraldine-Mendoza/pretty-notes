@@ -1,6 +1,7 @@
 package com.example.prettylistapp
 
 //import android.support.v7.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -50,20 +51,42 @@ class NoteInspection : AppCompatActivity() {
         when (item?.itemId) {
 
             //need to timplement result for Main Activity
-            /*R.id.delete_button -> {
+            R.id.delete_button -> {
 
                 notePosition?.let {
-                    deleteSingleFile(it, filesDir)
+                    //if successful at removing file,
+                    if (deleteSingleFile(it, filesDir)) {
+                        listFilesAddress.removeAt(it)
+                    }
+
+                    val result = Intent()
+                    result.putExtra("changedNotePosition", it)
+                    setResult(DELETE_NOTE)
+
                 } ?: run {
 
                     Log.d("inspection", "position is null!")
                     errorToastAlert("note position cannot be found.", noteTitle.context)
+                    setResult(ERROR_SAVING)
                 }
 
-                onBackPressed()
-            }*/
+                finish()
+            }
 
-            android.R.id.home -> { onBackPressed(); true}
+            android.R.id.home -> {
+
+                //update item in list and file before going back
+                if (!saveUpdatedNote()) {
+                    setResult(ERROR_SAVING)
+                } else {
+
+                    val result = Intent()
+                    result.putExtra("changedNotePosition", notePosition)
+                    setResult(CHANGE_NOTE)
+                }
+
+                finish()
+            }
 
             else -> return true
 
@@ -88,6 +111,8 @@ class NoteInspection : AppCompatActivity() {
         if ( notePosition!! !in (0..listFilesAddress.size) || notePosition == null) {
             Log.d("note inspection", "the position is outside of the possible range! position is $notePosition")
             errorToastAlert("requesting note information failed.", noteTitle.context)
+
+            setResult(ERROR_SAVING)
             onBackPressed()
         }
 
@@ -104,7 +129,7 @@ class NoteInspection : AppCompatActivity() {
         noteContent = findViewById(R.id.note_content)
     }
 
-    private fun saveUpdatedNote() {
+    private fun saveUpdatedNote(): Boolean {
 
         Log.d("file saving", "saving note")
 
@@ -115,12 +140,15 @@ class NoteInspection : AppCompatActivity() {
         }
 
         notePosition?.let {
-            updateNoteInAdress(it, filesDir)
+            if (!updateNoteInAdress(it, filesDir)) { return false }
         }
+
+        return true
 
     }
 
     companion object {
         const val noteArrayPosition: Int = 0
+        const val changedNotePosition: Int = 0
     }
 }

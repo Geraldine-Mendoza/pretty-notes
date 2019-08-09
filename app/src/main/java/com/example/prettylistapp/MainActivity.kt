@@ -38,6 +38,7 @@ import kotlinx.android.synthetic.main.activity_main.*
     organize saveFile/getFile functions and how we get filesDir
     re-add newNote supportActionBar
     add space between title and text now that extra bottom space was taken out
+ *  need to have a "temp" list of Notes so that we can give it to real list after it is cleared EVERYTIME bc recyclerView sucks
 
 */
 
@@ -53,15 +54,22 @@ import kotlinx.android.synthetic.main.activity_main.*
  *   AESTHETIC CONCERNS
  *
  * - actionbar should blend with no shadow... GET OUT MATERIAL I WANT MINIMAL!
- * - space between title and content is too large because of editText style of title
- * - larger margin at sides of note
+ * - space between title and content is too large because of editText style of title DONE (was bc of println instead of print())
+ * - larger margin at sides of note DONE
  * - change title font
  * - textured note background
  *
  *
  */
 
+//types of request codes
+val CREATE_NEW_NOTE = 1
+val MODIFY_NOTE = 2
 
+//result codes
+val ERROR_SAVING = 3
+val DELETE_NOTE = 4
+val CHANGE_NOTE = 5
 
 class MainActivity : AppCompatActivity() {
 
@@ -78,10 +86,9 @@ class MainActivity : AppCompatActivity() {
     private val deleteButtonId = tagButtonId+1
     private val cancelButtonId = tagButtonId+2
 
-    //types of result types
-    private val CREATE_NEW_NOTE = 1
-    private val MODIFY_NOTE = 2
-    private val ERROR_SAVING = 3
+    companion object {
+        const val changedNotePosition: Int = 0
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -185,6 +192,19 @@ class MainActivity : AppCompatActivity() {
 
                     if (resultCode == Activity.RESULT_OK) { updateInsertedItem() }
                 }
+
+                MODIFY_NOTE -> {
+
+                    val changedNoteAt = intent.getIntExtra("changedNotePosition", 0)
+
+                    when (resultCode) {
+
+                        DELETE_NOTE -> { updateDeletedItem(changedNoteAt) }
+
+                        CHANGE_NOTE -> { updateModifiedItem(changedNoteAt) }
+                    }
+
+                }
             }
         }
     }
@@ -202,17 +222,31 @@ class MainActivity : AppCompatActivity() {
     //what could also be done is that listFilesAddress is updated from within the Files functions, and then we simply get the list again from Note class...
 
     //called only after returning (with trash result) from inspection activity
-    private fun updateDeletedItem() { }
+    private fun updateDeletedItem(deletedItemPosition: Int) {
+
+        adapter.notifyItemRemoved(deletedItemPosition)
+        adapter.notifyItemRangeChanged(deletedItemPosition, listFilesAddress.size-deletedItemPosition-1)
+
+    }
 
     //called only after returning (with correct result) from inspection activity
-    private fun updateModifiedItem() {  }
+    private fun updateModifiedItem(itemPosition: Int) {
+
+        adapter.notifyItemChanged(itemPosition)
+        adapter.notifyItemRangeChanged(itemPosition, listFilesAddress.size-itemPosition)
+    }
 
     //called only after new note activity
     private fun updateInsertedItem() {
 
         //list is updated in newNote.kt, here we just need to update adapter (recyclerView)
         Log.d("list file", "this is list of Note objects: $listFilesAddress at updateInserted Item has size ${listFilesAddress.size}")
-        //adapter.notifyItemInserted(0) --> seems like not really needed
+        //adapter.notifyItemInserted(0) //--> seems like not really needed
+
+        val mTemp = mutableListOf<Note>()
+        mTemp.addAll(listFilesAddress)
+        listFilesAddress.clear()
+        listFilesAddress.addAll(mTemp)
 
         //APP WILL CRASH UNLESS YOU UPDATE ITEM RANGE ALWAYSSSSS ;((
         adapter.notifyItemRangeChanged(0, listFilesAddress.size)

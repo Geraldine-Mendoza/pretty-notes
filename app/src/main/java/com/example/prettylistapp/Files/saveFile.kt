@@ -5,8 +5,8 @@ import com.example.prettylistapp.Note
 import java.io.File
 import java.io.PrintWriter
 
-
-fun updateNoteInAdress(position: Int, filesDir: File) {
+//this gets info from list... so list is updated then file is changed.... either this or all other ones should be changed
+fun updateNoteInAdress(position: Int, filesDir: File): Boolean {
 
     val note = Note.getListFiles()[position]
     val arrayNoteProperties = listOf<String>(note.getTitle(), note.getContent())
@@ -19,8 +19,9 @@ fun updateNoteInAdress(position: Int, filesDir: File) {
             Log.d("file saving", "folder ${noteFolder.path} doesnt exist!")
         }
 
-        writeToAllFiles(noteFolder, arrayNoteProperties)
+        if ( writeToAllFiles(noteFolder, arrayNoteProperties) ) { return true }
     }
+    return false
 }
 
 //need to redo all :( no
@@ -61,7 +62,7 @@ fun tryToSaveFile(fileName: String, appMainDir: File, noteProperties: List<Strin
     }
 }
 
-fun writeToAllFiles(noteDir: File, noteProperties: List<String>) {
+fun writeToAllFiles(noteDir: File, noteProperties: List<String>): Boolean {
 
     for ((index, file_name) in notePropertyFileNames.withIndex()) {
 
@@ -77,10 +78,11 @@ fun writeToAllFiles(noteDir: File, noteProperties: List<String>) {
         } catch (e: Exception) {
             // handle the exception
             Log.d("file saving", "unable to save $value to $file_name")
-
+            return false
         }
     }
 
+    return true
 }
 
 //i dont think this is a reliable way to create id

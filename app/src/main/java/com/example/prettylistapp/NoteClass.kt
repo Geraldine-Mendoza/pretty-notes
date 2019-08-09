@@ -3,6 +3,7 @@ package com.example.prettylistapp
 import android.util.Log
 import com.example.prettylistapp.Files.getFilesNotes
 import com.example.prettylistapp.Files.getLastNoteAdded
+import com.example.prettylistapp.Files.updateNoteInAdress
 import java.io.File
 
 class Note(setId: String?, setTitle: String, setContent: String) {
@@ -27,6 +28,10 @@ class Note(setId: String?, setTitle: String, setContent: String) {
 
         private val listFilesAddress: MutableList<Note> = mutableListOf()
         private val listAddresses: MutableList<String> = mutableListOf()
+
+        fun updateItemAt(position: Int) {
+
+        }
 
         fun getListFiles(): MutableList<Note> {
             return listFilesAddress

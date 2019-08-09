@@ -1,5 +1,6 @@
 package com.example.prettylistapp
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -11,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
@@ -23,7 +25,7 @@ import java.security.AccessController.getContext
 //position passed to adapter is the same as position of Note in array
 /** does this change after item is deleted? **/
 
-class Adapter(context: Context, private val listFilesAddress: MutableList<Note>): RecyclerView.Adapter<Adapter.ViewHolder>() {
+class Adapter(private val activityContext: Context, private val listFilesAddress: MutableList<Note>): RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     //var listFilesAddress = com.example.prettylistapp.Files.listFilesAddress
 
@@ -121,15 +123,12 @@ class Adapter(context: Context, private val listFilesAddress: MutableList<Note>)
             //on click, create intent to move to note
             Log.d("position", "clicked note with position $adapterPosition")
 
-            //get context using the (previously) inflatedView
-            val context = context
-
             //intent
             val fullNoteIntent = Intent(context, NoteInspection::class.java) //add class intent will move to
 
             //add extra info to intent
             fullNoteIntent.putExtra("noteArrayPosition", adapterPosition) //add correct note position in arr
-            context.startActivity(fullNoteIntent)
+            (activityContext as Activity).startActivityForResult(fullNoteIntent, 2)
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> = object : ItemDetailsLookup.ItemDetails<Long>() {

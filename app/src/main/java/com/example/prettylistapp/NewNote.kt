@@ -47,10 +47,10 @@ class NewNote : AppCompatActivity() {
 
             R.id.done_button -> doneButtonClicked()
             //is this safe, for back button?
-            android.R.id.home -> { setResult(Activity.RESULT_CANCELED); onBackPressed() }
+            android.R.id.home -> { setResult(Activity.RESULT_CANCELED); finish() }
             else -> {
                 setResult(Activity.RESULT_CANCELED)
-                onBackPressed()
+                finish()
             }
 
         }
