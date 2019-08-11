@@ -5,6 +5,10 @@ import com.example.prettylistapp.Note
 import java.io.File
 import java.io.PrintWriter
 
+
+//IN TRY TO SAVE FILE, YOU SHOULD MAKE IT SO THAT IT TRANSLATED NOTE TO ADDRESS, WITHOUT NEED OF ARRAY
+
+
 //this gets info from list... so list is updated then file is changed.... either this or all other ones should be changed
 fun updateNoteInAdress(position: Int, filesDir: File): Boolean {
 
@@ -23,6 +27,8 @@ fun updateNoteInAdress(position: Int, filesDir: File): Boolean {
     }
     return false
 }
+
+
 
 //need to redo all :( no
 fun tryToSaveFile(fileName: String, appMainDir: File, noteProperties: List<String>): Boolean {
@@ -45,13 +51,18 @@ fun tryToSaveFile(fileName: String, appMainDir: File, noteProperties: List<Strin
     //creating inner folder within files, name of which is id....
     Log.d("saving file", "file name should be $fileName")
     Log.d("saving file", "path name is $dirNotesMain / $fileName")
+
+    //creating directory with id of note and saving last modified date
     val noteDir = File(dirNotesMain, "$fileName/") //it is fileName
+    //val createdDate = noteDir.lastModified()
+
     success = noteDir.mkdirs()
 
     //able to make /notes/uniqueFileName: create file for properties
     if (success) {
 
         writeToAllFiles(noteDir, noteProperties)
+        noteDir.setLastModified(System.currentTimeMillis())
 
         Log.d("saving file", "we should have directory ${noteDir.path}")
         return true

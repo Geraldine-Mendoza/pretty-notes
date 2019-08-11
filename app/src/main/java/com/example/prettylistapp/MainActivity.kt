@@ -178,10 +178,13 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_CANCELED) {
             Log.d("result", "cancelled result")
 
-            //if this is not added, recyclerView will crash on return (without list change) when an editText is focused in the newNote activity
-            // ... i dont know why
+            //if list is not cleared and notifydatachanged, app will crash on return from newNote (after no note made)
+            //and back button pressed
+
+            Note.clearList()
             adapter.notifyDataSetChanged()
         } else if (resultCode == ERROR_SAVING) {
+            Note.clearList()
             adapter.notifyDataSetChanged()
             errorToastAlert("error saving note.", recyclerView.context)
         } else {
@@ -199,7 +202,7 @@ class MainActivity : AppCompatActivity() {
 
                     when (resultCode) {
 
-                        DELETE_NOTE -> { updateDeletedItem(changedNoteAt) }
+                        DELETE_NOTE -> { updateDeletedItem(changedNoteAt)}
 
                         CHANGE_NOTE -> { updateModifiedItem(changedNoteAt) }
                     }
@@ -221,11 +224,12 @@ class MainActivity : AppCompatActivity() {
     /** EACH FUNCTION MUST BE CALLED APPROPIATELY AND UPDATEALLITEMS SHOULD BE USED CAREFULLY*/
     //what could also be done is that listFilesAddress is updated from within the Files functions, and then we simply get the list again from Note class...
 
+    //does not work
     //called only after returning (with trash result) from inspection activity
     private fun updateDeletedItem(deletedItemPosition: Int) {
 
         adapter.notifyItemRemoved(deletedItemPosition)
-        adapter.notifyItemRangeChanged(deletedItemPosition, listFilesAddress.size-deletedItemPosition-1)
+        adapter.notifyItemRangeChanged(deletedItemPosition, listFilesAddress.size-deletedItemPosition)
 
     }
 
@@ -243,11 +247,6 @@ class MainActivity : AppCompatActivity() {
         Log.d("list file", "this is list of Note objects: $listFilesAddress at updateInserted Item has size ${listFilesAddress.size}")
         //adapter.notifyItemInserted(0) //--> seems like not really needed
 
-        val mTemp = mutableListOf<Note>()
-        mTemp.addAll(listFilesAddress)
-        listFilesAddress.clear()
-        listFilesAddress.addAll(mTemp)
-
         //APP WILL CRASH UNLESS YOU UPDATE ITEM RANGE ALWAYSSSSS ;((
         adapter.notifyItemRangeChanged(0, listFilesAddress.size)
 
@@ -261,7 +260,15 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("resume", "we are now resuming")
         Note.initializeList(filesDir)
-        Log.d("list file", "this is list of Note objects: $listFilesAddress")
+        Log.d("list file", "this is list of Note objects: ")
+
+        val temp = mutableListOf<String>()
+        for (note in listFilesAddress) {
+            temp.add(note.getTitle())
+        }
+
+        Log.d("file list", "$temp")
+        temp.clear()
 
         adapter.notifyDataSetChanged()
 

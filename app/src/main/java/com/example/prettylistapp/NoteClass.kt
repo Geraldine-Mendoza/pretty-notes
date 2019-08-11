@@ -2,7 +2,6 @@ package com.example.prettylistapp
 
 import android.util.Log
 import com.example.prettylistapp.Files.getFilesNotes
-import com.example.prettylistapp.Files.getLastNoteAdded
 import com.example.prettylistapp.Files.updateNoteInAdress
 import java.io.File
 
@@ -28,10 +27,16 @@ class Note(setId: String?, setTitle: String, setContent: String) {
 
         private val listFilesAddress: MutableList<Note> = mutableListOf()
         private val listAddresses: MutableList<String> = mutableListOf()
+        private val mTemp: MutableList<Note> = mutableListOf()
 
-        fun updateItemAt(position: Int) {
+        fun clearList() {
 
+            mTemp.addAll(listFilesAddress)
+            listFilesAddress.clear()
+            listFilesAddress.addAll(mTemp)
+            mTemp.clear()
         }
+
 
         fun getListFiles(): MutableList<Note> {
             return listFilesAddress
@@ -42,13 +47,12 @@ class Note(setId: String?, setTitle: String, setContent: String) {
             listFilesAddress.addAll(getFilesNotes(filesDir))
         }
 
-        //this function could cause accidental copying if we don't check successful saving
-        fun updateItemInserted(filesDir: File) {
-            addToBeginningList(getLastNoteAdded(filesDir))
+        fun updateItemInserted(note: Note) {
+            listFilesAddress.add(0, note)
         }
 
-        private fun addToBeginningList(addNote: Note) {
-            this.listFilesAddress.add(0, addNote)
+        fun updateItemRemoved(position: Int) {
+            listFilesAddress.removeAt(position)
         }
 
         //can also call with list of Note objects and then remove that way...
@@ -56,13 +60,6 @@ class Note(setId: String?, setTitle: String, setContent: String) {
 
             for (index in listRemovedIndex) {
                 this.listFilesAddress.removeAt(index)
-            }
-        }
-
-        //i dont think this would ever be used
-        fun addList(list: List<Note>) {
-            for (note in list) {
-                addToBeginningList(note)
             }
         }
     }

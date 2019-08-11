@@ -79,11 +79,16 @@ class NewNote : AppCompatActivity() {
             //save new dir -> if success in saving, return RESULT_OK
             if (tryToSaveFile(it, directory, noteProperties)) {
 
-                //update array list
-                Note.updateItemInserted(filesDir)
+                //if saved, update in list
+                Note.updateItemInserted(newNote)
 
-                //returning with success message... (no need to return data, unlike delete)
-                //val result = Intent()
+                val temp = mutableListOf<String>()
+                for (note in Note.getListFiles()) {
+                    temp.add(note.getTitle())
+                }
+
+                Log.d("file list", "after last item is saved, this is list: $temp")
+                temp.clear()
                 setResult(Activity.RESULT_OK)
             } else {
                 setResult(ERROR_SAVING)

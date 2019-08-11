@@ -48,6 +48,12 @@ fun getFilesNotes(filesDir: File): MutableList<Note> {
 
     val fileNoteArr: MutableList<Note> = mutableListOf()
 
+    val temp = mutableListOf<Long>()
+
+    for (file in fileList) { temp.add(file.lastModified()) }
+    Log.d("getting file", "right after getting from internal memory, we have time modified: $temp")
+    temp.clear()
+
     //files saved
     for (file in fileList) {
 
@@ -59,22 +65,16 @@ fun getFilesNotes(filesDir: File): MutableList<Note> {
 
     //Log.d("get files", "files in app: ${Arrays.toString(fileList)}")
 
-    return fileNoteArr.asReversed() //return reverse so that most recent appears first
+    return fileNoteArr //return reverse so that most recent appears first
 
 }
 
-fun getLastNoteAdded(filesDir: File): Note {
-
-    val f = File(filesDir, "notes")
-    val fileList = f.listFiles()
-    val lastFile = fileList[fileList.size-1] //returning last file --> that is, most recently added
-
-    return turnAddressToNote(lastFile)
-}
-
-fun getFileAdresses(filesDir: File): Array<File> {
+//retruns address of files in order of 'creation' (hopefully) recent to old
+fun getFileAdresses(filesDir: File): List<File> {
     //listFile() -> in app main folder
     // File.listFiles() --> in specific path
     val f = File(filesDir, "notes")
-    return f.listFiles()
+    val filesArr = f.listFiles().toList()
+
+    return filesArr.sortedByDescending { fileId -> fileId.lastModified() }
 }

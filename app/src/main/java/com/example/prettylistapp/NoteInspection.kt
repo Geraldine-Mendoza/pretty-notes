@@ -56,19 +56,22 @@ class NoteInspection : AppCompatActivity() {
                 notePosition?.let {
                     //if successful at removing file,
                     if (deleteSingleFile(it, filesDir)) {
-                        listFilesAddress.removeAt(it)
+                        Log.d("delete file", "succesfully deleted file")
+                        Note.updateItemRemoved(it)
+
+                        val result = Intent()
+                        result.putExtra("changedNotePosition", it)
+                        setResult(DELETE_NOTE)
+
+                        finish()
+                        return true
                     }
-
-                    val result = Intent()
-                    result.putExtra("changedNotePosition", it)
-                    setResult(DELETE_NOTE)
-
-                } ?: run {
-
-                    Log.d("inspection", "position is null!")
-                    errorToastAlert("note position cannot be found.", noteTitle.context)
-                    setResult(ERROR_SAVING)
                 }
+
+
+                Log.d("inspection", "position is null!")
+                errorToastAlert("note position cannot be found.", noteTitle.context)
+                setResult(ERROR_SAVING)
 
                 finish()
             }
